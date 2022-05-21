@@ -8,7 +8,7 @@ using System.Text;
 
 namespace WCF_REST
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
+
     [ServiceContract]
     public interface IRestService
     {
@@ -29,21 +29,21 @@ namespace WCF_REST
         string addXml(Manga manga);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "/Manga{id}", Method = "DELETE")]
+        [WebInvoke(UriTemplate = "/Manga{id}", Method = "DELETE", ResponseFormat = WebMessageFormat.Xml)]
         string deleteXml(string id);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "/MangaEdit{id}", Method = "PUT")]
+        [WebInvoke(UriTemplate = "/MangaEdit{id}", Method = "PUT", ResponseFormat = WebMessageFormat.Xml)]
         string editXml(string id, Manga manga);
 
 
-/*        //JSON
+        //JSON
         [OperationContract]
-        [WebGet(UriTemplate = "/json/Manga")]
+        [WebGet(UriTemplate = "/json/Manga", ResponseFormat = WebMessageFormat.Json)]
         List<Manga> GetAllMangasJson();
 
         [OperationContract]
-        [WebGet(UriTemplate = "/Manga/{id}",
+        [WebGet(UriTemplate = "/json/Manga/{id}",
                 ResponseFormat = WebMessageFormat.Json)]
         Manga GetByIdJson(string id);
 
@@ -56,24 +56,20 @@ namespace WCF_REST
 
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "/json/Manga{id}", Method = "DELETE")]
+        [WebInvoke(UriTemplate = "/json/Manga{id}", Method = "DELETE", ResponseFormat = WebMessageFormat.Json)]
         string deleteJson(string id);
 
         [OperationContract]
-        [WebInvoke(UriTemplate = "/json/MangaEdit{id}", Method = "PUT")]
-        string editJson(string id, Manga manga);*/
+        [WebInvoke(UriTemplate = "/json/MangaEdit{id}", Method = "PUT", ResponseFormat = WebMessageFormat.Json)]
+        string editJson(string id, Manga manga);
 
     }
 
 
-    // Use a data contract as illustrated in the sample below to add composite types to service operations.
+
     [DataContract]
     public class Manga
     {
-/*        string mangaTitle = "default";
-        string mangaAuthor = "default author";
-        int mangaRate = 4;*/
-
         [DataMember]
         public int? Id { get; set; }
 
@@ -85,6 +81,5 @@ namespace WCF_REST
 
         [DataMember(Order = 2)]
         public int MangaRate { get; set; }
-
     }
 }

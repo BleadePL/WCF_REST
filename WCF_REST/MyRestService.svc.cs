@@ -8,8 +8,7 @@ using System.Text;
 
 namespace WCF_REST
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
+
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class MyRestService : IRestService
     {
@@ -29,7 +28,7 @@ namespace WCF_REST
                     System.Net.HttpStatusCode.BadRequest);
             }
 
-            int count = Mangas.Values.Where(m => m.MangaTitle.Equals(m.MangaTitle) && 
+            int count = Mangas.Values.Where(m => m.MangaTitle.Equals(manga.MangaTitle) && 
                                                       m.MangaAuthor.Equals(manga.MangaAuthor) && 
                                                       m.MangaRate == manga.MangaRate).Count();
 
@@ -84,11 +83,6 @@ namespace WCF_REST
             }
         }
 
-        public List<Manga> GetAllMangas()
-        {
-           return Mangas.Values.ToList();
-        }
-
         public Manga GetByIdXml(string id)
         {
             int Id = int.Parse(id);
@@ -101,6 +95,36 @@ namespace WCF_REST
                 throw new WebFaultException<string>("404: Element Not Found",
                                                     System.Net.HttpStatusCode.NotFound);
             }
+        }
+
+        public List<Manga> GetAllMangas()
+        {
+            return Mangas.Values.OrderBy(m => m.Id).ToList();
+        }
+
+        List<Manga> IRestService.GetAllMangasJson()
+        {
+            return Mangas.Values.OrderBy(m => m.Id).ToList();
+        }
+
+        Manga IRestService.GetByIdJson(string id)
+        {
+            return GetByIdXml(id);
+        }
+
+        string IRestService.addJson(Manga manga)
+        {
+            return addXml(manga);
+        }
+
+        string IRestService.deleteJson(string id)
+        {
+            return deleteXml(id);
+        }
+
+        string IRestService.editJson(string id, Manga manga)
+        {
+            return editXml(id, manga);
         }
     }
 }
